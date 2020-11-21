@@ -50,7 +50,7 @@ export interface Field {
 
 export type MetaToken = RegexpMeta | StructuralMeta
 
-type DecoratedToken = Token | Field | MetaToken
+export type DecoratedToken = Token | Field | MetaToken
 
 const mapRegexpMeta = (pattern: Pattern): DecoratedToken[] => {
     const tokens: DecoratedToken[] = []
@@ -371,7 +371,7 @@ export const hasRegexpValue = (field: string): boolean => {
     }
 }
 
-const decorateTokens = (tokens: Token[]): DecoratedToken[] => {
+export const decorateTokens = (tokens: Token[]): DecoratedToken[] => {
     const decorated: DecoratedToken[] = []
     for (const token of tokens) {
         switch (token.type) {

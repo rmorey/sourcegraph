@@ -29,6 +29,7 @@ monaco.editor.defineTheme(SOURCEGRAPH_DARK, {
         'editorHoverWidget.background': '#1c2736',
         'editorHoverWidget.foreground': '#F2F4F8',
         'editorHoverWidget.border': '#2b3750',
+        'editor.hoverHighlightBackground': '#495057',
     },
     rules: [
         { token: 'identifier', foreground: '#f2f4f8' },
@@ -137,6 +138,7 @@ export class MonacoEditor extends React.PureComponent<Props, State> {
         }
         this.props.editorWillMount(monaco)
         const editor = monaco.editor.create(element, {
+            hover: { delay: 0 },
             value: this.props.value,
             language: this.props.language,
             theme: this.props.isLightTheme ? SOURCEGRAPH_LIGHT : SOURCEGRAPH_DARK,
