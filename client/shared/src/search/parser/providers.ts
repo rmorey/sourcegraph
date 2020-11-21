@@ -12,6 +12,7 @@ import { SearchPatternType } from '../../graphql-operations'
 interface SearchFieldProviders {
     tokens: Monaco.languages.TokensProvider
     hover: Monaco.languages.HoverProvider
+    hover_deep: Monaco.languages.HoverProvider
     completion: Monaco.languages.CompletionItemProvider
     diagnostics: Observable<Monaco.editor.IMarkerData[]>
 }
@@ -73,6 +74,18 @@ export function getProviders(
                         first(),
                         map(({ scanned }) =>
                             scanned.type === 'error' ? null : getHoverResult(scanned.term, position)
+                        ),
+                        takeUntil(fromEventPattern(handler => token.onCancellationRequested(handler)))
+                    )
+                    .toPromise(),
+        },
+        hover_deep: {
+            provideHover: (textModel, position, token) =>
+                scannedQueries
+                    .pipe(
+                        first(),
+                        map(({ scanned }) =>
+                            scanned.type === 'error' ? null : getHoverResult(scanned.term, position, 2)
                         ),
                         takeUntil(fromEventPattern(handler => token.onCancellationRequested(handler)))
                     )

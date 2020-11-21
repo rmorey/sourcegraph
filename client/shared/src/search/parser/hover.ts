@@ -21,7 +21,8 @@ const toHover = (token: DecoratedToken): string => {
  */
 export const getHoverResult = (
     tokens: Token[],
-    { column }: Pick<Monaco.Position, 'column'>
+    { column }: Pick<Monaco.Position, 'column'>,
+    depth: number = 1
 ): Monaco.languages.Hover | null => {
     console.log(`I see column ${column}`)
     const tokensAtCursor = tokens.filter(({ range }) => range.start + 1 <= column && range.end >= column)
@@ -39,15 +40,22 @@ export const getHoverResult = (
                         ? resolvedFilter.definition.description(resolvedFilter.negated)
                         : resolvedFilter.definition.description
                 )
-                // range = toMonacoRange(token.range)
+                if (depth === 2) {
+                    // highlight the whole range in the first level
+                    range = toMonacoRange(token.range)
+                }
             }
-            if (token.value) {
+            if (token.value && depth === 1) {
                 const hovers = decorateTokens([token])
                     .slice(1)
                     .filter(({ range }) => range.start + 1 <= column && range.end >= column)
-                    .map(toHover)
                 console.log(`yep ${JSON.stringify(hovers)}`)
-                values.push(...hovers)
+                values.push(...hovers.map(toHover))
+                /*
+                if (depth === 2 && hovers.length > 0) {
+                    range = toMonacoRange(hovers[0].range)
+                }
+                */
             }
         }
     })
