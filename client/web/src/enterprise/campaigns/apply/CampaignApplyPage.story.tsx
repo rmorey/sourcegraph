@@ -28,7 +28,7 @@ const nodes: ChangesetSpecFields[] = [
     ...Object.values(hiddenChangesetSpecStories),
 ]
 
-const campaignSpec: CampaignSpecFields = {
+const campaignSpecs = (): CampaignSpecFields => ({
     appliesToCampaign: null,
     createdAt: subDays(new Date(), 5).toISOString(),
     creator: {
@@ -50,18 +50,27 @@ const campaignSpec: CampaignSpecFields = {
         namespaceName: 'alice',
         url: '/users/alice',
     },
+    supersedingCampaignSpec: boolean('supersedingCampaignSpec', false)
+        ? {
+              createdAt: subDays(new Date(), 1).toISOString(),
+              applyURL: '/users/alice/campaigns/apply/newspecid',
+          }
+        : null,
     viewerCanAdminister: boolean('viewerCanAdminister', true),
     viewerCampaignsCodeHosts: {
         totalCount: 0,
         nodes: [],
     },
-}
+})
 
-const fetchCampaignSpecCreate: typeof fetchCampaignSpecById = () => of(campaignSpec)
+const fetchCampaignSpecCreate: typeof fetchCampaignSpecById = () =>
+    of({
+        ...campaignSpecs(),
+    })
 
 const fetchCampaignSpecMissingCredentials: typeof fetchCampaignSpecById = () =>
     of({
-        ...campaignSpec,
+        ...campaignSpecs(),
         viewerCampaignsCodeHosts: {
             totalCount: 2,
             nodes: [
@@ -79,7 +88,7 @@ const fetchCampaignSpecMissingCredentials: typeof fetchCampaignSpecById = () =>
 
 const fetchCampaignSpecUpdate: typeof fetchCampaignSpecById = () =>
     of({
-        ...campaignSpec,
+        ...campaignSpecs(),
         appliesToCampaign: {
             id: 'somecampaign',
             name: 'awesome-campaign',

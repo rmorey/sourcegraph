@@ -17,6 +17,7 @@ All notable changes to Sourcegraph are documented in this file.
 
 - Password reset link expiration can be customized via `auth.passwordResetLinkExpiry` in the site config. [#13999](https://github.com/sourcegraph/sourcegraph/issues/13999)
 - Campaign steps may now include environment variables from outside of the campaign spec using [array syntax](http://docs.sourcegraph.com/campaigns/references/campaign_spec_yaml_reference#environment-array). [#15822](https://github.com/sourcegraph/sourcegraph/issues/15822)
+- When a newer version of a campaign spec is uploaded, a message is now displayed when viewing the campaign or an outdated campaign spec. [#14532](https://github.com/sourcegraph/sourcegraph/issues/14532)
 
 ### Changed
 
