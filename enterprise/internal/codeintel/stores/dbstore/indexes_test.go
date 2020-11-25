@@ -12,7 +12,7 @@ import (
 	"github.com/sourcegraph/sourcegraph/internal/db/basestore"
 	"github.com/sourcegraph/sourcegraph/internal/db/dbconn"
 	"github.com/sourcegraph/sourcegraph/internal/db/dbtesting"
-	dbworkerstore "github.com/sourcegraph/sourcegraph/internal/workerutil/dbworker/store"
+	"github.com/sourcegraph/sourcegraph/internal/workerutil"
 )
 
 func TestGetIndexByID(t *testing.T) {
@@ -51,7 +51,7 @@ func TestGetIndexByID(t *testing.T) {
 		Indexer:     "sourcegraph/lsif-tsc:latest",
 		IndexerArgs: []string{"lib/**/*.js", "test/**/*.js", "--allowJs", "--checkJs"},
 		Outfile:     "dump.lsif",
-		ExecutionLogs: []dbworkerstore.ExecutionLogEntry{
+		ExecutionLogs: []workerutil.ExecutionLogEntry{
 			{Command: []string{"op", "1"}, Out: "Indexing\nUploading\nDone with 1.\n"},
 			{Command: []string{"op", "2"}, Out: "Indexing\nUploading\nDone with 2.\n"},
 		},
@@ -303,7 +303,7 @@ func TestInsertIndex(t *testing.T) {
 		Indexer:     "sourcegraph/lsif-tsc:latest",
 		IndexerArgs: []string{"lib/**/*.js", "test/**/*.js", "--allowJs", "--checkJs"},
 		Outfile:     "dump.lsif",
-		ExecutionLogs: []dbworkerstore.ExecutionLogEntry{
+		ExecutionLogs: []workerutil.ExecutionLogEntry{
 			{Command: []string{"op", "1"}, Out: "Indexing\nUploading\nDone with 1.\n"},
 			{Command: []string{"op", "2"}, Out: "Indexing\nUploading\nDone with 2.\n"},
 		},
@@ -333,7 +333,7 @@ func TestInsertIndex(t *testing.T) {
 		Indexer:     "sourcegraph/lsif-tsc:latest",
 		IndexerArgs: []string{"lib/**/*.js", "test/**/*.js", "--allowJs", "--checkJs"},
 		Outfile:     "dump.lsif",
-		ExecutionLogs: []dbworkerstore.ExecutionLogEntry{
+		ExecutionLogs: []workerutil.ExecutionLogEntry{
 			{Command: []string{"op", "1"}, Out: "Indexing\nUploading\nDone with 1.\n"},
 			{Command: []string{"op", "2"}, Out: "Indexing\nUploading\nDone with 2.\n"},
 		},
