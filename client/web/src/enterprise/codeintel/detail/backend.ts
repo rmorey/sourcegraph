@@ -18,12 +18,7 @@ import {
     LsifUploadResult,
     LsifUploadVariables,
 } from '../../../graphql-operations'
-import {
-    lsifIndexFieldsFragment,
-    indexStepsFieldsFragment,
-    lsifUploadFieldsFragment,
-    executionLogEntryFieldsFragment,
-} from '../shared/backend'
+import { lsifIndexFieldsFragment, lsifUploadFieldsFragment } from '../shared/backend'
 
 export function fetchLsifUpload({ id }: { id: string }): Observable<LsifUploadFields | null> {
     const query = gql`
@@ -56,8 +51,6 @@ export function fetchLsifIndex({ id }: { id: string }): Observable<LsifIndexFiel
         }
 
         ${lsifIndexFieldsFragment}
-        ${indexStepsFieldsFragment}
-        ${executionLogEntryFieldsFragment}
     `
 
     return requestGraphQL<LsifIndexResult, LsifIndexVariables>(query, { id }).pipe(
