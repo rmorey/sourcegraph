@@ -23,7 +23,7 @@ func (r *executionLogEntryResolver) StartTime() gql.DateTime {
 }
 
 func (r *executionLogEntryResolver) DurationMilliseconds() int32 {
-	return int32(r.entry.Duration.Milliseconds())
+	return int32(r.entry.DurationMs)
 }
 
 func (r *executionLogEntryResolver) Out(ctx context.Context) (string, error) {
