@@ -157,7 +157,11 @@ func TestAddExecutionLogEntry(t *testing.T) {
 		t.Fatalf("expected a job to be dequeued")
 	}
 
-	if err := handler.addExecutionLogEntry(context.Background(), "test_queue", "deadbeef", job.ID, []string{"ls", "-a"}, "<log payload>"); err != nil {
+	entry := workerutil.ExecutionLogEntry{
+		Command: []string{"ls", "-a"},
+		Out:     "<log payload>",
+	}
+	if err := handler.addExecutionLogEntry(context.Background(), "test_queue", "deadbeef", job.ID, entry); err != nil {
 		t.Fatalf("unexpected error updating log contents: %s", err)
 	}
 
@@ -168,11 +172,8 @@ func TestAddExecutionLogEntry(t *testing.T) {
 	if call.Arg1 != 42 {
 		t.Errorf("unexpected job identifier. want=%d have=%d", 42, call.Arg1)
 	}
-	if diff := cmp.Diff([]string{"ls", "-a"}, call.Arg2); diff != "" {
-		t.Errorf("unexpected commands (-want +got):\n%s", diff)
-	}
-	if call.Arg3 != "<log payload>" {
-		t.Errorf("unexpected log contents. want=%s have=%s", "<log payload>", call.Arg2)
+	if diff := cmp.Diff(entry, call.Arg2); diff != "" {
+		t.Errorf("unexpected entry (-want +got):\n%s", diff)
 	}
 }
 
@@ -180,7 +181,11 @@ func TestAddExecutionLogEntryUnknownQueue(t *testing.T) {
 	options := Options{}
 	handler := newHandler(options, glock.NewMockClock())
 
-	if err := handler.addExecutionLogEntry(context.Background(), "test_queue", "deadbjeef", 42, []string{"ls", "-a"}, "<log payload>"); err != ErrUnknownQueue {
+	entry := workerutil.ExecutionLogEntry{
+		Command: []string{"ls", "-a"},
+		Out:     "<log payload>",
+	}
+	if err := handler.addExecutionLogEntry(context.Background(), "test_queue", "deadbjeef", 42, entry); err != ErrUnknownQueue {
 		t.Fatalf("unexpected error. want=%q have=%q", ErrUnknownQueue, err)
 	}
 }
@@ -193,7 +198,11 @@ func TestAddExecutionLogEntryUnknownJob(t *testing.T) {
 	}
 	handler := newHandler(options, glock.NewMockClock())
 
-	if err := handler.addExecutionLogEntry(context.Background(), "test_queue", "deadbeef", 42, []string{"ls", "-a"}, "<log payload>"); err != ErrUnknownJob {
+	entry := workerutil.ExecutionLogEntry{
+		Command: []string{"ls", "-a"},
+		Out:     "<log payload>",
+	}
+	if err := handler.addExecutionLogEntry(context.Background(), "test_queue", "deadbeef", 42, entry); err != ErrUnknownJob {
 		t.Fatalf("unexpected error. want=%q have=%q", ErrUnknownJob, err)
 	}
 }
