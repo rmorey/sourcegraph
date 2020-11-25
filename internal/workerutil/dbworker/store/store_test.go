@@ -12,6 +12,7 @@ import (
 	"github.com/keegancsmith/sqlf"
 	"github.com/sourcegraph/sourcegraph/internal/db/basestore"
 	"github.com/sourcegraph/sourcegraph/internal/db/dbconn"
+	"github.com/sourcegraph/sourcegraph/internal/workerutil"
 )
 
 func TestStoreQueuedCount(t *testing.T) {
@@ -394,7 +395,11 @@ func TestStoreAddExecutionLogEntry(t *testing.T) {
 		command := []string{"ls", "-a", fmt.Sprintf("%d", i+1)}
 		payload := fmt.Sprintf("<load payload %d>", i+1)
 
-		if err := testStore(defaultTestStoreOptions).AddExecutionLogEntry(context.Background(), 1, command, payload); err != nil {
+		entry := workerutil.ExecutionLogEntry{
+			Command: command,
+			Out:     payload,
+		}
+		if err := testStore(defaultTestStoreOptions).AddExecutionLogEntry(context.Background(), 1, entry); err != nil {
 			t.Fatalf("unexpected error adding executor log entry: %s", err)
 		}
 	}
@@ -408,12 +413,12 @@ func TestStoreAddExecutionLogEntry(t *testing.T) {
 	}
 
 	for i := 0; i < numEntries; i++ {
-		var entry ExecutionLogEntry
+		var entry workerutil.ExecutionLogEntry
 		if err := json.Unmarshal([]byte(contents[i]), &entry); err != nil {
 			t.Fatalf("unexpected error decoding entry: %s", err)
 		}
 
-		expected := ExecutionLogEntry{
+		expected := workerutil.ExecutionLogEntry{
 			Command: []string{"ls", "-a", fmt.Sprintf("%d", i+1)},
 			Out:     fmt.Sprintf("<load payload %d>", i+1),
 		}
