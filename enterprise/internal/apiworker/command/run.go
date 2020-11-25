@@ -42,7 +42,7 @@ func runCommand(ctx context.Context, logger *Logger, command command) error {
 	exitCode, err := monitorCommand(cmd, pipeReaderWaitGroup)
 	duration := time.Since(startTime)
 
-	logger.RecordCommand(workerutil.ExecutionLogEntry{
+	logger.Log(workerutil.ExecutionLogEntry{
 		Key:       command.Key,
 		Command:   command.Commands,
 		StartTime: startTime,

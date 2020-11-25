@@ -132,9 +132,6 @@ const genericStage = <E extends { startTime: string; exitCode: number }>(
     }
 }
 
-//
-//
-
 interface ExecutionLogEntryProps {
     logEntry: {
         key: string
@@ -205,7 +202,20 @@ const ExecutionLogEntry: FunctionComponent<ExecutionLogEntryProps> = ({ logEntry
     </div>
 )
 
-// TODO - can do this with date-fns?
+interface LogOutputProps {
+    text: string
+    className?: string
+}
+
+const LogOutput: FunctionComponent<LogOutputProps> = ({ text, className }) => (
+    <pre className={classNames('bg-code rounded p-3 mb-0', className)}>
+        <code>
+            {/* {text.split('\n').map(line => line.replace(/^std(out|err): /, '')).join('\n')} */}
+            {text}
+        </code>
+    </pre>
+)
+
 const formatMilliseconds = (milliseconds: number): string => {
     if (milliseconds < 1000) {
         return `${milliseconds} milliseconds`
@@ -219,23 +229,3 @@ const formatMilliseconds = (milliseconds: number): string => {
 
     return `${milliseconds / (1000 * 60 * 60)} hours`
 }
-
-//
-//
-
-interface LogOutputProps {
-    text: string
-    className?: string
-}
-
-const LogOutput: FunctionComponent<LogOutputProps> = ({ text, className }) => (
-    <pre className={classNames('bg-code rounded p-3 mb-0', className)}>
-        <code>
-            {text
-                .split('\n')
-                // .map(line => line.replace(/^std(out|err): /, ''))
-                .map(line => line)
-                .join('\n')}
-        </code>
-    </pre>
-)

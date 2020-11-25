@@ -65,69 +65,39 @@ export const lsifIndexFieldsFragment = gql`
 export const indexStepsFieldsFragment = gql`
     fragment LsifIndexStepsFields on IndexSteps {
         setup {
-            key
-            command
-            startTime
-            exitCode
-            out
-            durationMilliseconds
-            # ...ExecutionLogEntryFields
+            ...ExecutionLogEntryFields
         }
         preIndex {
             root
             image
             commands
             logEntry {
-                key
-                command
-                startTime
-                exitCode
-                out
-                durationMilliseconds
-                # ...ExecutionLogEntryFields
+                ...ExecutionLogEntryFields
             }
         }
         index {
             indexerArgs
             outfile
             logEntry {
-                key
-                command
-                startTime
-                exitCode
-                out
-                durationMilliseconds
-                # ...ExecutionLogEntryFields
+                ...ExecutionLogEntryFields
             }
         }
         upload {
-            key
-            command
-            startTime
-            exitCode
-            out
-            durationMilliseconds
-            # ...ExecutionLogEntryFields
+            ...ExecutionLogEntryFields
         }
         teardown {
-            key
-            command
-            startTime
-            exitCode
-            out
-            durationMilliseconds
-            # ...ExecutionLogEntryFields
+            ...ExecutionLogEntryFields
         }
     }
 `
 
-// export const executionLogEntryFieldsFragment = gql`
-//     fragment ExecutionLogEntryFields on ExecutionLogEntry {
-//         key
-//         command
-//         startTime
-//         exitCode
-//         out
-//         durationMilliseconds
-//     }
-// `
+export const executionLogEntryFieldsFragment = gql`
+    fragment ExecutionLogEntryFields on ExecutionLogEntry {
+        key
+        command
+        startTime
+        exitCode
+        out
+        durationMilliseconds
+    }
+`

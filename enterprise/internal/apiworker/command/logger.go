@@ -22,9 +22,8 @@ func NewLogger(redactedValues ...string) *Logger {
 	}
 }
 
-// TODO - rename
-// TODO - redocument
-func (l *Logger) RecordCommand(entry workerutil.ExecutionLogEntry) {
+// Log redacts secrets from the given log entry and stores it.
+func (l *Logger) Log(entry workerutil.ExecutionLogEntry) {
 	for _, v := range l.redactedValues {
 		entry.Out = strings.Replace(entry.Out, v, "******", -1)
 	}
@@ -32,6 +31,7 @@ func (l *Logger) RecordCommand(entry workerutil.ExecutionLogEntry) {
 	l.entries = append(l.entries, entry)
 }
 
+// Entries returns a copy of the stored log entries.
 func (l *Logger) Entries() (entries []workerutil.ExecutionLogEntry) {
 	for _, entry := range l.entries {
 		entries = append(entries, entry)
