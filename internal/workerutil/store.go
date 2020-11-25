@@ -1,6 +1,12 @@
 package workerutil
 
-import "context"
+import (
+	"context"
+	"database/sql/driver"
+	"encoding/json"
+	"fmt"
+	"time"
+)
 
 // Record is a generic interface for record conforming to the requirements of the store.
 type Record interface {
@@ -20,8 +26,8 @@ type Store interface {
 	// for all additional operations (MarkComplete, MarkErrored, and Done) while processing the given record.
 	Dequeue(ctx context.Context, extraArguments interface{}) (Record, Store, bool, error)
 
-	// SetLogContents updates the log contents of the record.
-	SetLogContents(ctx context.Context, id int, logContents string) error
+	// AddExecutionLogEntry adds an executor log entry to the record.
+	AddExecutionLogEntry(ctx context.Context, id int, entry ExecutionLogEntry) error
 
 	// MarkComplete attempts to update the state of the record to complete. This method returns a boolean flag indicating
 	// if the record was updated.
@@ -39,4 +45,30 @@ type Store interface {
 	// or temporary resources, or commit or rollback a transaction. This method should append any additional error
 	// that occurs during finalization to the error argument.
 	Done(err error) error
+}
+
+// TODO - document
+type ExecutionLogEntry struct {
+	Key       string        `json:"key"`
+	Command   []string      `json:"command"`
+	StartTime time.Time     `json:"startTime"`
+	ExitCode  int           `json:"exitCode"`
+	Out       string        `json:"out"`
+	Duration  time.Duration `json:"duration"`
+}
+
+//
+// TODO - move this to a wrapper in dbworker/store
+
+func (e *ExecutionLogEntry) Scan(value interface{}) error {
+	b, ok := value.([]byte)
+	if !ok {
+		return fmt.Errorf("value is not []byte: %T", value)
+	}
+
+	return json.Unmarshal(b, &e)
+}
+
+func (e ExecutionLogEntry) Value() (driver.Value, error) {
+	return json.Marshal(e)
 }

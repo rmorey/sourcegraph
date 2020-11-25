@@ -36,15 +36,7 @@ export const lsifIndexFieldsFragment = gql`
         id
         inputCommit
         inputRoot
-        indexer
-        indexerArgs
-        outfile
-        logContents
-        dockerSteps {
-            root
-            image
-            commands
-        }
+        inputIndexer
         projectRoot {
             url
             path
@@ -58,6 +50,9 @@ export const lsifIndexFieldsFragment = gql`
                 abbreviatedOID
             }
         }
+        steps {
+            ...LsifIndexStepsFields
+        }
         state
         failure
         queuedAt
@@ -66,3 +61,73 @@ export const lsifIndexFieldsFragment = gql`
         placeInQueue
     }
 `
+
+export const indexStepsFieldsFragment = gql`
+    fragment LsifIndexStepsFields on IndexSteps {
+        setup {
+            key
+            command
+            startTime
+            exitCode
+            out
+            durationMilliseconds
+            # ...ExecutionLogEntryFields
+        }
+        preIndex {
+            root
+            image
+            commands
+            logEntry {
+                key
+                command
+                startTime
+                exitCode
+                out
+                durationMilliseconds
+                # ...ExecutionLogEntryFields
+            }
+        }
+        index {
+            indexerArgs
+            outfile
+            logEntry {
+                key
+                command
+                startTime
+                exitCode
+                out
+                durationMilliseconds
+                # ...ExecutionLogEntryFields
+            }
+        }
+        upload {
+            key
+            command
+            startTime
+            exitCode
+            out
+            durationMilliseconds
+            # ...ExecutionLogEntryFields
+        }
+        teardown {
+            key
+            command
+            startTime
+            exitCode
+            out
+            durationMilliseconds
+            # ...ExecutionLogEntryFields
+        }
+    }
+`
+
+// export const executionLogEntryFieldsFragment = gql`
+//     fragment ExecutionLogEntryFields on ExecutionLogEntry {
+//         key
+//         command
+//         startTime
+//         exitCode
+//         out
+//         durationMilliseconds
+//     }
+// `
