@@ -49,12 +49,12 @@ type Store interface {
 
 // ExecutionLogEntry represents a command run by the executor.
 type ExecutionLogEntry struct {
-	Key       string        `json:"key"`
-	Command   []string      `json:"command"`
-	StartTime time.Time     `json:"startTime"`
-	ExitCode  int           `json:"exitCode"`
-	Out       string        `json:"out"`
-	Duration  time.Duration `json:"duration"`
+	Key        string    `json:"key"`
+	Command    []string  `json:"command"`
+	StartTime  time.Time `json:"startTime"`
+	ExitCode   int       `json:"exitCode"`
+	Out        string    `json:"out"`
+	DurationMs int       `json:"durationMs"`
 }
 
 // TODO(efritz) - move this to a wrapper in dbworker/store

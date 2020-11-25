@@ -43,12 +43,12 @@ func runCommand(ctx context.Context, logger *Logger, command command) error {
 	duration := time.Since(startTime)
 
 	logger.Log(workerutil.ExecutionLogEntry{
-		Key:       command.Key,
-		Command:   command.Commands,
-		StartTime: startTime,
-		ExitCode:  exitCode,
-		Out:       pipeContents.String(),
-		Duration:  duration,
+		Key:        command.Key,
+		Command:    command.Commands,
+		StartTime:  startTime,
+		ExitCode:   exitCode,
+		Out:        pipeContents.String(),
+		DurationMs: int(duration / time.Millisecond),
 	})
 
 	if err != nil {
