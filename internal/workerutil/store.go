@@ -47,7 +47,7 @@ type Store interface {
 	Done(err error) error
 }
 
-// TODO - document
+// ExecutionLogEntry represents a command run by the executor.
 type ExecutionLogEntry struct {
 	Key       string        `json:"key"`
 	Command   []string      `json:"command"`
@@ -57,8 +57,7 @@ type ExecutionLogEntry struct {
 	Duration  time.Duration `json:"duration"`
 }
 
-//
-// TODO - move this to a wrapper in dbworker/store
+// TODO(efritz) - move this to a wrapper in dbworker/store
 
 func (e *ExecutionLogEntry) Scan(value interface{}) error {
 	b, ok := value.([]byte)
