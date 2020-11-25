@@ -33,6 +33,15 @@ const commonProps = {
     telemetryService: NOOP_TELEMETRY_SERVICE,
 }
 
+const executionLog = {
+    key: 'log',
+    command: ['lsif-go', '-v'],
+    startTime: '2020-06-15T15:25:00+00:00',
+    exitCode: 0,
+    out: 'foo\nbar\baz\n',
+    durationMilliseconds: 123456,
+}
+
 const index: Omit<
     LsifIndexFields,
     'id' | 'state' | 'queuedAt' | 'startedAt' | 'finishedAt' | 'failure' | 'placeInQueue'
